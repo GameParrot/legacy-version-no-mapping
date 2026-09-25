@@ -119,7 +119,7 @@ func MarshalStackResponseSlotInfo(r protocol.IO, x *protocol.StackResponseSlotIn
 	}
 	r.String(&x.CustomName)
 	if IsProtoGTE(r, ID766) {
-		r.String(&x.FilteredCustomName)
+		protocol.OptionalFunc(r, &x.FilteredCustomName, r.String)
 	}
 	r.Varint32(&x.DurabilityCorrection)
 	if IsProtoGTE(r, ID2168) && (x.DurabilityCorrection < -32768 || x.DurabilityCorrection > 32767) {

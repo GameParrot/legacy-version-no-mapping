@@ -121,8 +121,8 @@ func registerPackets() {
 	registerPacket(&packet.StopSound{}, legacypacket.StopSound)
 	registerPacket(&packet.StructureBlockUpdate{}, legacypacket.StructureBlockUpdate)
 	registerPacket(&packet.StructureTemplateDataRequest{}, legacypacket.StructureTemplateDataRequest)
-	registerPacket(&packet.SubChunk{}, legacypacket.SubChunk)
-	registerPacket(&packet.SubChunkRequest{}, legacypacket.SubChunkRequest)
+	//registerPacket(&packet.SubChunk{}, legacypacket.SubChunk)
+	//registerPacket(&packet.SubChunkRequest{}, legacypacket.SubChunkRequest)
 	registerPacket(&packet.Text{}, legacypacket.Text)
 	registerPacket(&packet.Transfer{}, legacypacket.Transfer)
 	registerPacket(&packet.UpdateAbilities{}, legacypacket.UpdateAbilities)
@@ -229,14 +229,6 @@ func (p *Protocol) downgradePackets(pks []packet.Packet, conn *minecraft.Conn) [
 			return []packet.Packet{}
 		} else if pk.ID() == packet.IDBossEvent {
 			pks[pkIndex] = &legacypacket.TranslatedBossEvent{Pk: pk.(*packet.BossEvent)}
-		} else if pk.ID() == packet.IDClientboundUpdateSoundData {
-			update := pk.(*packet.ClientboundUpdateSoundData)
-			if _, stop := update.Stop.Value(); !stop {
-				// Before 1.26.40 this packet could only stop a sound. Other
-				// update variants have no faithful legacy representation.
-				return []packet.Packet{}
-			}
-			pks[pkIndex] = &translatedPacket{pk: pk, marshalFn: packets[pk.ID()]}
 		} else if pk.ID() == packet.IDPlayerList {
 			playerList := pk.(*packet.PlayerList)
 			var additions, removals []protocol.PlayerListEntry

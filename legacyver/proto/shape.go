@@ -206,10 +206,7 @@ func marshalShapePayload(io protocol.IO, x protocol.ShapeData) {
 			io.Bool(&shape.UseRotation)
 			protocol.OptionalFunc(io, &shape.BackgroundColour, io.BEARGB)
 			if IsProtoGTE(io, ID2192) {
-				//protocol.OptionalFunc(io, &shape.LineGapHeight, io.Float32)
-				val, _ := shape.LineGapHeight.Value()
-				io.Float32(&val)
-				shape.LineGapHeight = protocol.Option(val)
+				io.Float32(&shape.LineGapHeight)
 			}
 			io.Bool(&shape.DepthTest)
 			io.Bool(&shape.ShowBackface)

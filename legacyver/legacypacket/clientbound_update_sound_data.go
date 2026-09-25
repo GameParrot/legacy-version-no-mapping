@@ -9,13 +9,13 @@ import (
 func ClientboundUpdateSoundData(io protocol.IO, pk *packet.ClientboundUpdateSoundData) {
 	io.Uint64(&pk.ServerSoundHandle)
 	if proto.IsProtoGTE(io, proto.ID2168) {
-		protocol.OptionalFunc(io, &pk.Stop, func(x *protocol.SoundDataUpdate) { proto.MarshalSoundDataUpdate(io, x) })
-		protocol.OptionalFunc(io, &pk.SetVolume, func(x *protocol.SoundDataUpdate) { proto.MarshalSoundDataUpdate(io, x) })
-		protocol.OptionalFunc(io, &pk.SetPitch, func(x *protocol.SoundDataUpdate) { proto.MarshalSoundDataUpdate(io, x) })
-		protocol.OptionalFunc(io, &pk.Fade, func(x *protocol.SoundDataUpdate) { proto.MarshalSoundDataUpdate(io, x) })
-		protocol.OptionalFunc(io, &pk.SeekTo, func(x *protocol.SoundDataUpdate) { proto.MarshalSoundDataUpdate(io, x) })
-		protocol.OptionalFunc(io, &pk.Pause, func(x *protocol.SoundDataUpdate) { proto.MarshalSoundDataUpdate(io, x) })
-		protocol.OptionalFunc(io, &pk.Resume, func(x *protocol.SoundDataUpdate) { proto.MarshalSoundDataUpdate(io, x) })
+		protocol.Single(io, &pk.Stop)
+		protocol.Single(io, &pk.SetVolume)
+		protocol.Single(io, &pk.SetPitch)
+		protocol.Single(io, &pk.Fade)
+		protocol.Single(io, &pk.SeekTo)
+		protocol.Single(io, &pk.Pause)
+		protocol.Single(io, &pk.Resume)
 		return
 	}
 	event := "Stop"
@@ -25,6 +25,6 @@ func ClientboundUpdateSoundData(io protocol.IO, pk *packet.ClientboundUpdateSoun
 			io.UnknownEnumOption(event, "sound data event")
 			return
 		}
-		pk.Stop = protocol.Option(protocol.SoundDataUpdate{Type: protocol.SoundDataUpdateStop})
+		pk.Stop = protocol.SoundDataUpdate{Type: protocol.SoundDataUpdateStop}
 	}
 }
